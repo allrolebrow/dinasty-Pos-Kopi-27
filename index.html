@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynasty Pos Kopi 27 - Sistem Kasir</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- SETUP MODAL -->
+<div id="setupModal" class="modal-overlay active">
+  <div class="modal-box setup-modal">
+    <div class="modal-logo">
+      <img src="logo.png" alt="Dynasty Logo">
+    </div>
+    <h2 class="modal-title">Setup Google Sheets</h2>
+    <p class="modal-desc">Masukkan Google Apps Script Web App URL untuk menghubungkan kasir dengan Google Sheets</p>
+    <div class="form-group">
+      <label>Google Apps Script URL</label>
+      <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/..." class="input-field">
+    </div>
+    <div class="form-group">
+      <label>Nama Kasir</label>
+      <input type="text" id="kasirName" placeholder="Nama Kasir..." class="input-field" value="Kasir 1">
+    </div>
+    <button class="btn-gold btn-full" onclick="saveSetup()">🚀 Mulai Kasir</button>
+    <button class="btn-outline btn-full" onclick="skipSetup()" style="margin-top:8px">Lewati (Tanpa Google Sheets)</button>
+    <div class="setup-help">
+      <a href="SETUP_GUIDE.md" target="_blank">📖 Cara Setup Google Sheets →</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="app-container">
+  <!-- SIDEBAR / MENU -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Dynasty Logo" class="sidebar-logo">
+      <div class="sidebar-title">
+        <span class="brand-name">DYNASTY</span>
+        <span class="brand-sub">Pos Kopi 27</span>
+        <span class="brand-tagline">Dari Ngopi Jadi Story</span>
+      </div>
+    </div>
+
+    <div class="kasir-info">
+      <span class="kasir-badge">👤 <span id="kasirDisplay">Kasir 1</span></span>
+      <span class="date-badge" id="dateDisplay"></span>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="category-tabs">
+      <button class="cat-tab active" onclick="filterCategory('all')">Semua</button>
+      <button class="cat-tab" onclick="filterCategory('hot-coffee')">☕ Hot Coffee</button>
+      <button class="cat-tab" onclick="filterCategory('cool-coffee')">🧊 Cool Coffee</button>
+      <button class="cat-tab" onclick="filterCategory('makanan')">🍜 Makanan</button>
+      <button class="cat-tab" onclick="filterCategory('sate')">🍢 Sate</button>
+      <button class="cat-tab" onclick="filterCategory('cemilan')">🍟 Cemilan</button>
+      <button class="cat-tab" onclick="filterCategory('bungkus')">📦 Bungkus</button>
+    </div>
+
+    <!-- MENU LIST -->
+    <div class="menu-grid" id="menuGrid"></div>
+  </aside>
+
+  <!-- ORDER PANEL -->
+  <main class="order-panel">
+    <div class="order-header">
+      <h2>📋 Pesanan</h2>
+      <div class="order-header-actions">
+        <button class="btn-icon" onclick="clearOrder()" title="Hapus Semua">🗑️</button>
+        <button class="btn-icon" onclick="openDashboard()" title="Dashboard">📊</button>
+        <button class="btn-icon" onclick="openStockModal()" title="Kelola Stok">📦</button>
+        <button class="btn-icon" onclick="openSetup()" title="Pengaturan">⚙️</button>
+      </div>
+    </div>
+
+    <div class="order-items" id="orderItems">
+      <div class="empty-order">
+        <div class="empty-icon">☕</div>
+        <p>Belum ada pesanan</p>
+        <small>Pilih menu di sebelah kiri</small>
+      </div>
+    </div>
+
+    <div class="order-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotalDisplay">Rp 0</span>
+      </div>
+      <div class="summary-row discount-row">
+        <span>Diskon</span>
+        <div class="discount-input-wrap">
+          <input type="number" id="discountInput" placeholder="0" min="0" oninput="updateTotal()" class="discount-input">
+          <span>%</span>
+        </div>
+      </div>
+      <div class="summary-row total-row">
+        <span>TOTAL</span>
+        <span id="totalDisplay" class="total-amount">Rp 0</span>
+      </div>
+
+      <div class="payment-section">
+        <label class="pay-label">Metode Bayar</label>
+        <div class="pay-methods">
+          <button class="pay-btn active" onclick="setPayMethod('cash', this)">💵 Cash</button>
+          <button class="pay-btn" onclick="setPayMethod('qris', this)">📱 QRIS</button>
+          <button class="pay-btn" onclick="setPayMethod('transfer', this)">🏦 Transfer</button>
+        </div>
+        <div id="cashSection">
+          <label class="pay-label" style="margin-top:10px">Uang Diterima</label>
+          <input type="number" id="cashInput" placeholder="0" oninput="calcChange()" class="input-field" style="margin-bottom:8px">
+          <div class="summary-row">
+            <span>Kembalian</span>
+            <span id="changeDisplay" class="change-amount">Rp 0</span>
+          </div>
+        </div>
+        <div id="noNoteSection" class="note-input-wrap">
+          <input type="text" id="orderNote" placeholder="📝 Catatan pesanan..." class="input-field">
+        </div>
+      </div>
+
+      <button class="btn-gold btn-full btn-checkout" onclick="checkout()" id="checkoutBtn">
+        💳 PROSES BAYAR
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div id="receiptModal" class="modal-overlay">
+  <div class="modal-box receipt-modal">
+    <div id="receiptContent" class="receipt-content"></div>
+    <div class="receipt-actions">
+      <button class="btn-gold" onclick="printReceipt()">🖨️ Print Struk</button>
+      <button class="btn-outline" onclick="closeReceipt()">✅ Selesai</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD MODAL -->
+<div id="dashboardModal" class="modal-overlay">
+  <div class="modal-box dashboard-modal">
+    <div class="modal-header">
+      <h2>📊 Dashboard Penjualan</h2>
+      <button class="btn-close" onclick="closeDashboard()">✕</button>
+    </div>
+    <div class="dash-date-filter">
+      <label>Tanggal:</label>
+      <input type="date" id="dashDate" onchange="loadDashboard()" class="input-field" style="width:180px;display:inline-block;margin-left:8px">
+    </div>
+    <div class="dash-cards">
+      <div class="dash-card gold">
+        <div class="dash-card-icon">💰</div>
+        <div class="dash-card-label">Total Omset</div>
+        <div class="dash-card-value" id="dashOmset">Rp 0</div>
+      </div>
+      <div class="dash-card green">
+        <div class="dash-card-icon">📈</div>
+        <div class="dash-card-label">Total Keuntungan</div>
+        <div class="dash-card-value" id="dashProfit">Rp 0</div>
+      </div>
+      <div class="dash-card blue">
+        <div class="dash-card-icon">🧾</div>
+        <div class="dash-card-label">Total Transaksi</div>
+        <div class="dash-card-value" id="dashTrx">0</div>
+      </div>
+      <div class="dash-card purple">
+        <div class="dash-card-icon">☕</div>
+        <div class="dash-card-label">Item Terjual</div>
+        <div class="dash-card-value" id="dashItems">0</div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>📋 Menu Terlaris Hari Ini</h3>
+      <div id="topItemsList" class="top-items-list"></div>
+    </div>
+
+    <div class="dash-section">
+      <h3>🧾 Transaksi Terakhir</h3>
+      <div id="recentTrxList" class="trx-list"></div>
+    </div>
+
+    <div class="sync-status" id="syncStatus"></div>
+  </div>
+</div>
+
+<!-- STOCK MODAL -->
+<div id="stockModal" class="modal-overlay">
+  <div class="modal-box stock-modal">
+    <div class="modal-header">
+      <h2>📦 Kelola Stok</h2>
+      <button class="btn-close" onclick="closeStockModal()">✕</button>
+    </div>
+    <div class="stock-search">
+      <input type="text" id="stockSearch" placeholder="🔍 Cari menu..." class="input-field" oninput="renderStockList()">
+    </div>
+    <div class="stock-table-wrap">
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>Menu</th>
+            <th>Harga Jual</th>
+            <th>HPP (Modal)</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="stockTableBody"></tbody>
+      </table>
+    </div>
+    <div class="stock-footer">
+      <button class="btn-gold" onclick="saveAllStock()">💾 Simpan Semua</button>
+      <button class="btn-outline" onclick="closeStockModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT AREA -->
+<div id="printArea" style="display:none"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

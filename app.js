@@ -1,8 +1,10 @@
 // =============================================
 //  DYNASTY POS KOPI 27 - MAIN APPLICATION
+//  Update: Menu Lengkap + Stok Bahan Baku
 // =============================================
 
 const MENU_DATA = [
+  // HOT COFFEE
   {id:'hc1',name:'Kopi Hitam Story',price:5500,cost:2500,category:'hot-coffee',emoji:'☕'},
   {id:'hc2',name:'Kopi Aren Story',price:6500,cost:3000,category:'hot-coffee',emoji:'🍯'},
   {id:'hc3',name:'Kopi Jahe Bara',price:6500,cost:3000,category:'hot-coffee',emoji:'🫚'},
@@ -12,25 +14,99 @@ const MENU_DATA = [
   {id:'hc7',name:'Wedang Rempah',price:7500,cost:3000,category:'hot-coffee',emoji:'🌺'},
   {id:'hc8',name:'Teh Hangat',price:4000,cost:1500,category:'hot-coffee',emoji:'🍵'},
   {id:'hc9',name:'Jeruk Hangat',price:6000,cost:2500,category:'hot-coffee',emoji:'🍊'},
-  {id:'cc1',name:'Es Kopi Regal',price:11000,cost:5000,category:'cool-coffee',emoji:'🍪'},
-  {id:'cc2',name:'Es Kopi Creamy',price:8500,cost:4000,category:'cool-coffee',emoji:'🧊'},
-  {id:'cc3',name:'Es Kopi Renceng',price:6000,cost:2500,category:'cool-coffee',emoji:'❄️'},
-  {id:'cc4',name:'Es Teh',price:5000,cost:1500,category:'cool-coffee',emoji:'🧋'},
-  {id:'cc5',name:'Es Jeruk',price:6500,cost:2500,category:'cool-coffee',emoji:'🍹'},
+  // COOL COFFEE
+  {id:'cc1',name:'Es Kopi Dinasty 27',price:10000,cost:4500,category:'cool-coffee',emoji:'👑'},
+  {id:'cc2',name:'Pos Malam Latte',price:12000,cost:5500,category:'cool-coffee',emoji:'🌙'},
+  {id:'cc3',name:'Aren Boom',price:10000,cost:4500,category:'cool-coffee',emoji:'💥'},
+  {id:'cc4',name:'Matcha Sultan',price:12000,cost:5500,category:'cool-coffee',emoji:'🍵'},
+  {id:'cc5',name:'Choco Nyantai',price:10000,cost:4500,category:'cool-coffee',emoji:'🍫'},
+  {id:'cc6',name:'Kopi Tongkrongan',price:6000,cost:2500,category:'cool-coffee',emoji:'🪑'},
+  {id:'cc7',name:'Kopi Senja 27',price:10000,cost:4500,category:'cool-coffee',emoji:'🌅'},
+  {id:'cc8',name:'Es Kopi Regal',price:11000,cost:5000,category:'cool-coffee',emoji:'🍪'},
+  {id:'cc9',name:'Es Kopi Creamy',price:8500,cost:4000,category:'cool-coffee',emoji:'🧊'},
+  {id:'cc10',name:'Es Kopi Renceng',price:6000,cost:2500,category:'cool-coffee',emoji:'❄️'},
+  {id:'cc11',name:'Es Teh',price:5000,cost:1500,category:'cool-coffee',emoji:'🧋'},
+  {id:'cc12',name:'Es Jeruk',price:6500,cost:2500,category:'cool-coffee',emoji:'🍹'},
+  // MAKANAN
   {id:'mk1',name:'Mie Ribut',price:12500,cost:6000,category:'makanan',emoji:'🍜'},
   {id:'mk2',name:'Seblak 27',price:12000,cost:5500,category:'makanan',emoji:'🌶️'},
+  // SATE
   {id:'st1',name:'Sate Kepala',price:4500,cost:2000,category:'sate',emoji:'🍢'},
   {id:'st2',name:'Sate Kulit',price:4500,cost:2000,category:'sate',emoji:'🍢'},
   {id:'st3',name:'Sate Usus',price:4500,cost:2000,category:'sate',emoji:'🍢'},
   {id:'st4',name:'Sate Telor',price:5500,cost:2500,category:'sate',emoji:'🥚'},
   {id:'st5',name:'Sate Rempeloati',price:5500,cost:2500,category:'sate',emoji:'🍢'},
   {id:'st6',name:'Sate Tahu/Tempe',price:3000,cost:1200,category:'sate',emoji:'🫘'},
+  // CEMILAN
   {id:'cm1',name:'Choco Melt Toast',price:15000,cost:7000,category:'cemilan',emoji:'🍫'},
   {id:'cm2',name:'Cheese Melt Toast',price:15000,cost:7000,category:'cemilan',emoji:'🧀'},
   {id:'cm3',name:'Dynasty Golden Fries',price:15000,cost:6000,category:'cemilan',emoji:'🍟'},
   {id:'cm4',name:'Royal Cireng',price:15000,cost:6000,category:'cemilan',emoji:'👑'},
+  // BUNGKUS
   {id:'bk1',name:'Usus Crispy',price:2500,cost:1000,category:'bungkus',emoji:'📦'},
   {id:'bk2',name:'Krupuk Mlinjo',price:2500,cost:800,category:'bungkus',emoji:'🥨'},
+];
+
+// STOK BAHAN BAKU
+const BAHAN_BAKU = [
+  // Kopi & Minuman Dasar
+  {id:'b01',name:'Kopi Kapal Api',unit:'gram',category:'Kopi & Bubuk'},
+  {id:'b02',name:'Nescafe Classic',unit:'sachet',category:'Kopi & Bubuk'},
+  {id:'b03',name:'Nescafe Gold',unit:'sachet',category:'Kopi & Bubuk'},
+  {id:'b04',name:'Matcha Powder',unit:'gram',category:'Kopi & Bubuk'},
+  {id:'b05',name:'Coklat Powder',unit:'gram',category:'Kopi & Bubuk'},
+  // Gula & Pemanis
+  {id:'b06',name:'Gula Putih',unit:'gram',category:'Gula & Pemanis'},
+  {id:'b07',name:'Gula Aren',unit:'gram',category:'Gula & Pemanis'},
+  {id:'b08',name:'SKM',unit:'sachet',category:'Gula & Pemanis'},
+  {id:'b09',name:'Caramel Syrup',unit:'ml',category:'Gula & Pemanis'},
+  {id:'b10',name:'Madu',unit:'ml',category:'Gula & Pemanis'},
+  // Susu & Creamer
+  {id:'b11',name:'Susu Full Cream',unit:'ml',category:'Susu & Creamer'},
+  {id:'b12',name:'Susu Evaporasi',unit:'ml',category:'Susu & Creamer'},
+  {id:'b13',name:'Susu Greenfields',unit:'ml',category:'Susu & Creamer'},
+  {id:'b14',name:'Susu Coklat',unit:'ml',category:'Susu & Creamer'},
+  {id:'b15',name:'Creamer',unit:'gram',category:'Susu & Creamer'},
+  // Rempah & Jahe
+  {id:'b16',name:'Jahe',unit:'gram',category:'Rempah & Jahe'},
+  {id:'b17',name:'Jahe Sachet',unit:'sachet',category:'Rempah & Jahe'},
+  {id:'b18',name:'Rempah',unit:'gram',category:'Rempah & Jahe'},
+  // Topping & Bahan Minuman
+  {id:'b19',name:'Cheese',unit:'gram',category:'Topping'},
+  {id:'b20',name:'Mises',unit:'gram',category:'Topping'},
+  {id:'b21',name:'Oreo',unit:'gram',category:'Topping'},
+  {id:'b22',name:'Biskuit Regal',unit:'gram',category:'Topping'},
+  {id:'b23',name:'Jeruk',unit:'buah',category:'Topping'},
+  {id:'b24',name:'Tea Dandang',unit:'gram',category:'Topping'},
+  {id:'b25',name:'Yakult',unit:'botol',category:'Topping'},
+  // Kemasan
+  {id:'b26',name:'Cup 16oz',unit:'pcs',category:'Kemasan'},
+  {id:'b27',name:'Cup 14oz',unit:'pcs',category:'Kemasan'},
+  {id:'b28',name:'Tutup Cup',unit:'pcs',category:'Kemasan'},
+  {id:'b29',name:'Sedotan',unit:'pcs',category:'Kemasan'},
+  {id:'b30',name:'Tissue',unit:'pcs',category:'Kemasan'},
+  {id:'b31',name:'Bungkus Usus',unit:'pcs',category:'Kemasan'},
+  {id:'b32',name:'Bungkus Mlinjo',unit:'pcs',category:'Kemasan'},
+  // Es
+  {id:'b33',name:'Es Batu',unit:'kg',category:'Es'},
+  {id:'b34',name:'Es Gabus',unit:'pcs',category:'Es'},
+  {id:'b35',name:'Es Lilin',unit:'pcs',category:'Es'},
+  {id:'b36',name:'Es Yoghurt',unit:'pcs',category:'Es'},
+  // Bahan Sate & Makanan
+  {id:'b37',name:'Sate Kepala',unit:'tusuk',category:'Bahan Sate & Makanan'},
+  {id:'b38',name:'Sate Usus',unit:'tusuk',category:'Bahan Sate & Makanan'},
+  {id:'b39',name:'Sate Kulit',unit:'tusuk',category:'Bahan Sate & Makanan'},
+  {id:'b40',name:'Sate Tahu/Tempe',unit:'tusuk',category:'Bahan Sate & Makanan'},
+  {id:'b41',name:'Sate Rempeloati',unit:'tusuk',category:'Bahan Sate & Makanan'},
+  {id:'b42',name:'Cireng',unit:'pcs',category:'Bahan Sate & Makanan'},
+  {id:'b43',name:'Roti Kupas',unit:'lembar',category:'Bahan Sate & Makanan'},
+  {id:'b44',name:'Mie Supermie',unit:'bungkus',category:'Bahan Sate & Makanan'},
+  {id:'b45',name:'Kubis',unit:'gram',category:'Bahan Sate & Makanan'},
+  {id:'b46',name:'Sawi',unit:'gram',category:'Bahan Sate & Makanan'},
+  {id:'b47',name:'Telor',unit:'butir',category:'Bahan Sate & Makanan'},
+  {id:'b48',name:'Saus',unit:'gram',category:'Bahan Sate & Makanan'},
+  {id:'b49',name:'Cabe',unit:'gram',category:'Bahan Sate & Makanan'},
+  {id:'b50',name:'Kecap',unit:'ml',category:'Bahan Sate & Makanan'},
 ];
 
 let state = {
@@ -39,6 +115,7 @@ let state = {
   transactions:[],
   config:{scriptUrl:'',kasirName:'Kasir 1'},
   stocks:{},
+  bahanStok:{},
   currentCategory:'all'
 };
 
@@ -60,6 +137,9 @@ function loadFromStorage(){
     const stocks=JSON.parse(localStorage.getItem('dynasty_stocks')||'{}');
     MENU_DATA.forEach(item=>{if(stocks[item.id]===undefined)stocks[item.id]=99;});
     state.stocks=stocks;
+    const bahanStok=JSON.parse(localStorage.getItem('dynasty_bahan_stok')||'{}');
+    BAHAN_BAKU.forEach(b=>{if(bahanStok[b.id]===undefined)bahanStok[b.id]={jumlah:0,minStok:5,hargaBeli:0};});
+    state.bahanStok=bahanStok;
     const txns=JSON.parse(localStorage.getItem('dynasty_transactions')||'[]');
     state.transactions=txns;
     if(state.config.scriptUrl||localStorage.getItem('dynasty_setup_done')){
@@ -73,6 +153,7 @@ function saveToStorage(){
   try{
     localStorage.setItem('dynasty_config',JSON.stringify(state.config));
     localStorage.setItem('dynasty_stocks',JSON.stringify(state.stocks));
+    localStorage.setItem('dynasty_bahan_stok',JSON.stringify(state.bahanStok));
     localStorage.setItem('dynasty_transactions',JSON.stringify(state.transactions.slice(-500)));
   }catch(e){}
 }
@@ -141,14 +222,6 @@ function addToOrder(itemId){
   const existing=state.order.find(o=>o.id===itemId);
   if(existing){existing.qty++;}else{state.order.push({...item,qty:1});}
   renderOrder();updateTotal();updateMobileBadge();
-  // mobile: show order count feedback
-  if(window.innerWidth<=768){
-    const tabOrder=document.getElementById('tabOrder');
-    tabOrder.style.color='var(--gold-bright)';
-    setTimeout(()=>{
-      if(!tabOrder.classList.contains('active'))tabOrder.style.color='';
-    },400);
-  }
 }
 
 function updateQty(itemId,delta){
@@ -304,7 +377,6 @@ function printReceipt(){
   const content=document.getElementById('receiptContent').innerHTML;
   const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   const printHTML=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Struk Dynasty</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Courier New',monospace;font-size:12px;background:white;color:black;padding:10px}@media print{button{display:none!important}body{padding:2px}}.wrap{max-width:300px;margin:0 auto}.btn-print{display:block;width:100%;margin-top:12px;padding:12px;background:#D4A017;color:black;border:none;font-size:14px;font-weight:bold;border-radius:8px;cursor:pointer}.btn-close{display:block;width:100%;margin-top:6px;padding:10px;background:#444;color:white;border:none;font-size:13px;border-radius:8px;cursor:pointer}</style></head><body><div class="wrap">${content}</div>${isMobile?'<button class="btn-print" onclick="window.print()">🖨️ PRINT STRUK</button><button class="btn-close" onclick="window.close()">✕ Tutup</button>':''}</body></html>`;
-  
   if(isMobile){
     const w=window.open('','_blank','width=400,height=700');
     if(w){w.document.write(printHTML);w.document.close();setTimeout(()=>{w.print();},600);}
@@ -338,9 +410,7 @@ async function syncToSheets(trx){
     const t=state.transactions.find(t=>t.id===trx.id);
     if(t){t.synced=true;saveToStorage();}
     showToast('☁️ Data tersimpan ke Google Sheets','success');
-  }catch(err){
-    showToast('⚠️ Gagal sync. Data tersimpan lokal.','info');
-  }
+  }catch(err){showToast('⚠️ Gagal sync. Data tersimpan lokal.','info');}
 }
 
 function initDashDate(){
@@ -383,6 +453,7 @@ function loadDashboard(){
   document.getElementById('syncStatus').textContent=unsynced>0?`⚠️ ${unsynced} transaksi belum tersync`:state.config.scriptUrl?'✅ Semua transaksi tersync':'⚙️ Google Sheets belum dikonfigurasi';
 }
 
+// ===== STOK MENU (per item menu) =====
 function openStockModal(){renderStockList();document.getElementById('stockModal').classList.add('active');}
 function closeStockModal(){document.getElementById('stockModal').classList.remove('active');}
 
@@ -426,6 +497,71 @@ function saveAllStock(){
   });
   saveToStorage();renderMenu();closeStockModal();
   showToast('✅ Semua stok & harga disimpan!','success');
+}
+
+// ===== STOK BAHAN BAKU =====
+function openBahanModal(){
+  renderBahanList();
+  document.getElementById('bahanModal').classList.add('active');
+}
+function closeBahanModal(){document.getElementById('bahanModal').classList.remove('active');}
+
+function renderBahanList(){
+  const search=document.getElementById('bahanSearch').value.toLowerCase();
+  const items=BAHAN_BAKU.filter(b=>!search||b.name.toLowerCase().includes(search)||b.category.toLowerCase().includes(search));
+  
+  // Group by category
+  const grouped={};
+  items.forEach(b=>{
+    if(!grouped[b.category])grouped[b.category]=[];
+    grouped[b.category].push(b);
+  });
+
+  let html='';
+  Object.entries(grouped).forEach(([cat,bahanList])=>{
+    html+=`<tr><td colspan="5" style="background:var(--black3);color:var(--gold);font-family:var(--font-title);font-size:0.72rem;font-weight:700;padding:8px 10px;letter-spacing:0.05em;">📂 ${cat}</td></tr>`;
+    bahanList.forEach(b=>{
+      const s=state.bahanStok[b.id]||{jumlah:0,minStok:5,hargaBeli:0};
+      const low=s.jumlah<=s.minStok&&s.jumlah>0;
+      const habis=s.jumlah<=0;
+      const statusColor=habis?'var(--red)':low?'#F39C12':'var(--green)';
+      const statusText=habis?'❌ Habis':low?'⚠️ Menipis':'✅ Aman';
+      html+=`<tr>
+        <td style="font-size:0.76rem;">${b.name} <span style="color:var(--white-muted);font-size:0.6rem;">(${b.unit})</span></td>
+        <td><input type="number" class="stock-input" id="bj_${b.id}" value="${s.jumlah}" min="0" style="width:70px"></td>
+        <td><input type="number" class="stock-input" id="bm_${b.id}" value="${s.minStok}" min="0" style="width:60px"></td>
+        <td><input type="number" class="stock-input" id="bh_${b.id}" value="${s.hargaBeli}" min="0" style="width:80px"></td>
+        <td style="color:${statusColor};font-size:0.7rem;font-weight:700;white-space:nowrap;">${statusText}</td>
+      </tr>`;
+    });
+  });
+
+  document.getElementById('bahanTableBody').innerHTML=html;
+}
+
+function saveAllBahan(){
+  BAHAN_BAKU.forEach(b=>{
+    const j=document.getElementById(`bj_${b.id}`);
+    const m=document.getElementById(`bm_${b.id}`);
+    const h=document.getElementById(`bh_${b.id}`);
+    if(j||m||h){
+      state.bahanStok[b.id]={
+        jumlah:parseInt(j?.value)||0,
+        minStok:parseInt(m?.value)||5,
+        hargaBeli:parseInt(h?.value)||0
+      };
+    }
+  });
+  saveToStorage();
+  renderBahanList();
+  showToast('✅ Stok bahan baku disimpan!','success');
+}
+
+function getAlertBahan(){
+  return BAHAN_BAKU.filter(b=>{
+    const s=state.bahanStok[b.id]||{jumlah:0,minStok:5};
+    return s.jumlah<=s.minStok;
+  });
 }
 
 // MOBILE TABS

@@ -70,6 +70,7 @@
         <button class="btn-icon" onclick="clearOrder()" title="Hapus">🗑️</button>
         <button class="btn-icon" onclick="openDashboard()" title="Dashboard">📊</button>
         <button class="btn-icon" onclick="openStockModal()" title="Stok">📦</button>
+        <button class="btn-icon" onclick="openBahanModal()" title="Bahan Baku">🧂</button>
         <button class="btn-icon" onclick="openSetup()" title="Setting">⚙️</button>
       </div>
     </div>
@@ -133,6 +134,9 @@
   </button>
   <button class="mobile-tab-btn" onclick="openStockModal()">
     <span class="tab-icon">📦</span><span>Stok</span>
+  </button>
+  <button class="mobile-tab-btn" onclick="openBahanModal()">
+    <span class="tab-icon">🧂</span><span>Bahan</span>
   </button>
   <button class="mobile-tab-btn" onclick="openSetup()">
     <span class="tab-icon">⚙️</span><span>Setting</span>
@@ -202,6 +206,37 @@
     <div class="stock-footer">
       <button class="btn-gold" onclick="saveAllStock()">💾 Simpan Semua</button>
       <button class="btn-outline" onclick="closeStockModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- BAHAN BAKU MODAL -->
+<div id="bahanModal" class="modal-overlay">
+  <div class="modal-box stock-modal">
+    <div class="modal-header">
+      <h2>🧂 Stok Bahan Baku</h2>
+      <button class="btn-close" onclick="closeBahanModal()">✕</button>
+    </div>
+    <div class="stock-search">
+      <input type="text" id="bahanSearch" placeholder="🔍 Cari bahan..." class="input-field" oninput="renderBahanList()">
+    </div>
+    <div class="stock-table-wrap">
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>Nama Bahan</th>
+            <th>Jumlah</th>
+            <th>Min Stok</th>
+            <th>Harga Beli</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="bahanTableBody"></tbody>
+      </table>
+    </div>
+    <div class="stock-footer">
+      <button class="btn-gold" onclick="saveAllBahan()">💾 Simpan Semua</button>
+      <button class="btn-outline" onclick="closeBahanModal()">Tutup</button>
     </div>
   </div>
 </div>

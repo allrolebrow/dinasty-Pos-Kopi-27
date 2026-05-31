@@ -1,6 +1,7 @@
 // =============================================
 //  DYNASTY POS KOPI 27 - MAIN APPLICATION
 //  Update: Menu Lengkap + Stok Bahan Baku + BT Print
+//  Fix: Input cash tidak mental ke halaman menu
 // =============================================
 
 const MENU_DATA = [
@@ -314,7 +315,7 @@ function checkout(){
 }
 
 function showReceipt(trx){
-  window._lastTrx=trx; // simpan untuk Bluetooth print
+  window._lastTrx=trx;
   let content=`
 <div style="text-align:center;font-weight:bold;font-size:13px;margin-bottom:4px;">★ DYNASTY POS KOPI 27 ★</div>
 <div style="text-align:center;font-size:10px;color:#555;margin-bottom:2px;">Dari Ngopi Jadi Story</div>
@@ -447,11 +448,9 @@ function buildESCPOS(){
   const dash=()=>ln('- - - - - - - - - - - - - - - -');
   const col2=(l,r,w=32)=>{const sp=Math.max(1,w-l.length-r.length);ln(l+' '.repeat(sp)+r);};
 
-  // Init
   cmd(ESC,0x40);
   cmd(ESC,0x74,0x06);
 
-  // Header
   center();bold(true);big(true);
   ln('DYNASTY POS KOPI 27');
   big(false);
@@ -460,14 +459,12 @@ function buildESCPOS(){
   ln('WA: 0813 3003 0411');
   div();
 
-  // Info
   left();
   ln('No : '+trx.id);
   ln('Tgl: '+trx.date+'  '+trx.time);
   ln('Kas: '+trx.kasir);
   dash();
 
-  // Items
   trx.items.forEach(item=>{
     const nama=item.name.length>20?item.name.substring(0,19)+'.':item.name;
     ln(nama);
@@ -478,19 +475,16 @@ function buildESCPOS(){
 
   dash();
 
-  // Subtotal & diskon
   if(trx.discount>0){
     col2('Subtotal',formatRpP(trx.subtotal));
     col2('Diskon '+trx.discount+'%','-'+formatRpP(trx.subtotal-trx.total));
   }
 
-  // Total
   bold(true);big(true);center();
   ln('TOTAL: '+formatRpP(trx.total));
   big(false);bold(false);left();
   div();
 
-  // Bayar
   if(trx.payMethod==='cash'){
     col2('Bayar (Cash)',formatRpP(trx.cash));
     col2('Kembalian',formatRpP(trx.change));
@@ -670,8 +664,21 @@ function saveAllBahan(){
   showToast('✅ Stok bahan baku disimpan!','success');
 }
 
-// Fix: cegah keyboard HP trigger resize yang bikin balik ke menu
+// =============================================
+//  MOBILE TAB NAVIGATION - FIXED
+//  Tidak mental ke menu saat keyboard HP muncul
+// =============================================
 let _mobileTab = 'menu';
+let _lastWindowWidth = window.innerWidth;
+
+function initMobileTabs(){
+  if(window.innerWidth <= 768){
+    document.getElementById('sidebarPanel').classList.add('mobile-active');
+    document.getElementById('orderPanel').classList.remove('mobile-active');
+    _mobileTab = 'menu';
+  }
+}
+
 function switchMobileTab(tab){
   _mobileTab = tab;
   document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));
@@ -687,16 +694,17 @@ function switchMobileTab(tab){
 }
 
 window.addEventListener('resize',()=>{
-  // Cek apakah resize karena keyboard muncul (tinggi berkurang tapi lebar sama)
-  const isKeyboard = window.innerWidth > 200 && window.innerHeight < window.screen.height * 0.75;
-  if(isKeyboard) return; // keyboard muncul, jangan lakukan apa-apa
-  
-  if(window.innerWidth>768){
+  const currentWidth = window.innerWidth;
+  // Hanya proses jika LEBAR berubah — keyboard HP hanya ubah tinggi, bukan lebar
+  if(currentWidth === _lastWindowWidth) return;
+  _lastWindowWidth = currentWidth;
+
+  if(currentWidth > 768){
     document.getElementById('sidebarPanel').classList.remove('mobile-active');
     document.getElementById('orderPanel').classList.remove('mobile-active');
   }else{
     // Kembalikan ke tab yang sedang aktif, bukan reset ke menu
-    if(_mobileTab==='order'){
+    if(_mobileTab === 'order'){
       document.getElementById('orderPanel').classList.add('mobile-active');
       document.getElementById('sidebarPanel').classList.remove('mobile-active');
     }else{
@@ -706,26 +714,9 @@ window.addEventListener('resize',()=>{
   }
 });
 
-function switchMobileTab(tab){
-  document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));
-  if(tab==='menu'){
-    document.getElementById('sidebarPanel').classList.add('mobile-active');
-    document.getElementById('orderPanel').classList.remove('mobile-active');
-    document.getElementById('tabMenu').classList.add('active');
-  }else{
-    document.getElementById('orderPanel').classList.add('mobile-active');
-    document.getElementById('sidebarPanel').classList.remove('mobile-active');
-    document.getElementById('tabOrder').classList.add('active');
-  }
-}
-
-window.addEventListener('resize',()=>{
-  if(window.innerWidth>768){
-    document.getElementById('sidebarPanel').classList.remove('mobile-active');
-    document.getElementById('orderPanel').classList.remove('mobile-active');
-  }else initMobileTabs();
-});
-
+// =============================================
+//  UTILITIES
+// =============================================
 function formatRp(amount){return'Rp '+amount.toLocaleString('id-ID');}
 function formatDate(date){const d=String(date.getDate()).padStart(2,'0'),m=String(date.getMonth()+1).padStart(2,'0'),y=date.getFullYear();return`${d}/${m}/${y}`;}
 function formatTime(date){const h=String(date.getHours()).padStart(2,'0'),m=String(date.getMinutes()).padStart(2,'0');return`${h}:${m}`;}

@@ -677,6 +677,42 @@ function initMobileTabs(){
   }
 }
 
+// Fix: cegah keyboard HP trigger resize yang bikin balik ke menu
+let _mobileTab = 'menu';
+function switchMobileTab(tab){
+  _mobileTab = tab;
+  document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));
+  if(tab==='menu'){
+    document.getElementById('sidebarPanel').classList.add('mobile-active');
+    document.getElementById('orderPanel').classList.remove('mobile-active');
+    document.getElementById('tabMenu').classList.add('active');
+  }else{
+    document.getElementById('orderPanel').classList.add('mobile-active');
+    document.getElementById('sidebarPanel').classList.remove('mobile-active');
+    document.getElementById('tabOrder').classList.add('active');
+  }
+}
+
+window.addEventListener('resize',()=>{
+  // Cek apakah resize karena keyboard muncul (tinggi berkurang tapi lebar sama)
+  const isKeyboard = window.innerWidth > 200 && window.innerHeight < window.screen.height * 0.75;
+  if(isKeyboard) return; // keyboard muncul, jangan lakukan apa-apa
+  
+  if(window.innerWidth>768){
+    document.getElementById('sidebarPanel').classList.remove('mobile-active');
+    document.getElementById('orderPanel').classList.remove('mobile-active');
+  }else{
+    // Kembalikan ke tab yang sedang aktif, bukan reset ke menu
+    if(_mobileTab==='order'){
+      document.getElementById('orderPanel').classList.add('mobile-active');
+      document.getElementById('sidebarPanel').classList.remove('mobile-active');
+    }else{
+      document.getElementById('sidebarPanel').classList.add('mobile-active');
+      document.getElementById('orderPanel').classList.remove('mobile-active');
+    }
+  }
+});
+
 function switchMobileTab(tab){
   document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));
   if(tab==='menu'){

@@ -670,13 +670,6 @@ function saveAllBahan(){
   showToast('✅ Stok bahan baku disimpan!','success');
 }
 
-function initMobileTabs(){
-  if(window.innerWidth<=768){
-    document.getElementById('sidebarPanel').classList.add('mobile-active');
-    document.getElementById('orderPanel').classList.remove('mobile-active');
-  }
-}
-
 // Fix: cegah keyboard HP trigger resize yang bikin balik ke menu
 let _mobileTab = 'menu';
 function switchMobileTab(tab){
